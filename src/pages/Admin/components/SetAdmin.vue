@@ -19,7 +19,7 @@ class SetAdmin extends Define<Emits> {
   form: edit_type = {
     name: "",
     account: "",
-    status: "",
+    status: null,
     headPicture: "",
     roleId: null,
   };
@@ -81,7 +81,7 @@ class SetAdmin extends Define<Emits> {
     this.form = {
       name: "",
       account: "",
-      status: "",
+      status: null,
       headPicture: "",
       roleId: null,
     };

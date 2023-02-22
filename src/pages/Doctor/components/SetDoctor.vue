@@ -153,7 +153,6 @@ defineExpose({
             v-model:value="sd.form.professionalIds"
             :options="sd.professionalList"
             :fieldNames="{ label: 'name', value: 'id' }"
-            mode="tags"
             placeholder="请选择相关职称!"
           />
         </a-form-item>
@@ -193,6 +192,8 @@ defineExpose({
             v-model:value="sd.form.introduction"
             placeholder="请填写简介！"
             :rows="4"
+            :maxlength="50"
+            showCount
           />
         </a-form-item>
         <a-form-item :wrapper-col="{ offset: 6, span: 18 }">

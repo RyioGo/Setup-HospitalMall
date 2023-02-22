@@ -6,7 +6,7 @@ export interface login_type {
 export interface add_type {
   name: string;
   account: string;
-  status: number | string;
+  status: number | null;
   headPicture: string;
   roleId: number | null;
 }

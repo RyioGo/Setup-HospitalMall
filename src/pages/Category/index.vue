@@ -4,16 +4,16 @@ import { defineComponent, onMounted } from "vue";
 import { Setup, Context, PassOnTo } from "vue-class-setup";
 import { message } from "ant-design-vue";
 //  for you api
-import { goods_delete, goods_selectPage } from "@/api/goods";
+import { category_delete, category_selectPage } from "@/api/category";
 
 import { columns } from "./config";
 import type { pagination_type } from "@/types/common";
-import type { edit_type } from "@/types/goods";
+import type { edit_type } from "@/types/category";
 //  for you components
-import SetGoods from "./components/SetGoods.vue";
+import SetCategory from "./components/SetCategory.vue";
 
 @Setup
-class GoodsView extends Context {
+class CategoryView extends Context {
   columns = columns;
   data: edit_type[] = [];
   page: pagination_type = {
@@ -25,14 +25,15 @@ class GoodsView extends Context {
 
   loading = false;
 
-  setGoodsRef!: any;
-  openSetGoods(type: string, id?: string) {
-    this.setGoodsRef.toggleShow(type, id);
+  setCategoryRef!: any;
+
+  openSetCategory(type: string, id?: string) {
+    this.setCategoryRef.toggleShow(type, id);
   }
 
   async getDataList() {
     this.loading = true;
-    const res = await goods_selectPage(this.page);
+    const res = await category_selectPage(this.page);
     if (res && res.code == 200) {
       this.data = res.data;
     } else {
@@ -41,8 +42,8 @@ class GoodsView extends Context {
     this.loading = false;
   }
 
-  async delGoods(id: string) {
-    const res = await goods_delete(id);
+  async delCategory(id: string) {
+    const res = await category_delete(id);
     if (res && res.code == 200) {
       this.getDataList();
       message.success(res.message);
@@ -58,16 +59,16 @@ class GoodsView extends Context {
 }
 
 export default defineComponent({
-  components: { SetGoods },
-  ...GoodsView.inject(),
+  components: { SetCategory },
+  ...CategoryView.inject(),
 });
 </script>
 
 <template>
   <div class="page-body">
-    <a-card title="商品管理" :bordered="false">
+    <a-card title="商品类别" :bordered="false">
       <div class="action">
-        <a-button type="primary" shape="round" @click="openSetGoods('add')">
+        <a-button type="primary" shape="round" @click="openSetCategory('add')">
           添加
         </a-button>
       </div>
@@ -80,14 +81,14 @@ export default defineComponent({
       >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'actions'">
-            <a-button type="link" @click="openSetGoods('edit', record.id)">
+            <a-button type="link" @click="openSetCategory('edit', record.id)">
               编辑
             </a-button>
             <a-popconfirm
               title="确认删除?"
               ok-text="确认"
               cancel-text="取消"
-              @confirm="delGoods(record.id)"
+              @confirm="delCategory(record.id)"
             >
               <a-button type="link" danger>删除</a-button>
             </a-popconfirm>
@@ -95,7 +96,10 @@ export default defineComponent({
         </template>
       </a-table>
     </a-card>
-    <SetGoods :ref="(el: any) => (setGoodsRef = el)" @list="getDataList" />
+    <SetCategory
+      :ref="(el: any) => (setCategoryRef = el)"
+      @list="getDataList"
+    />
   </div>
 </template>
 

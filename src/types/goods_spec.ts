@@ -1,13 +1,11 @@
 export interface add_type {
   name: string;
-  status: number | null;
+  spec: string;
+  goodsId: number | null;
+  price: number | null;
+  skuValueIds: string;
 }
 
 export interface edit_type extends add_type {
   id?: string;
-}
-
-export interface addMenu_type {
-  id: string;
-  menuIds: string;
 }
