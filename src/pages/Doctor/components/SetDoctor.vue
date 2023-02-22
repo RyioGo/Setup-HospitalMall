@@ -5,9 +5,11 @@ import { Setup, Define } from "vue-class-setup";
 import { message } from "ant-design-vue";
 //  for you api
 import { department_list } from "@/api/department";
+import { professional_list } from "@/api/professional";
 import { doctor_detail, doctor_add, doctor_edit } from "@/api/doctor";
 import type { edit_type } from "@/types/doctor";
 import type * as departmentType from "@/types/department";
+import type * as professionalType from "@/types/professional";
 //  for you components
 import Upload from "@/components/Upload/index.vue";
 @Setup
@@ -17,13 +19,14 @@ class SetDoctor extends Define<Emits> {
   type = "add";
 
   departmentList: departmentType.edit_type[] = [];
+  professionalList: professionalType.edit_type[] = [];
 
   form: edit_type = {
     name: "",
     skilled: "",
     picture: "",
     departmentId: null,
-    professionalIds: "",
+    professionalIds: [],
     introduction: "",
   };
 
@@ -33,6 +36,7 @@ class SetDoctor extends Define<Emits> {
     this.visible = true;
     this.type = type;
     this.getDepartmentList();
+    this.getProfessionalList();
     if (type == "edit") {
       this.getDoctorDetail(id!);
     }
@@ -46,19 +50,20 @@ class SetDoctor extends Define<Emits> {
       message.error(res.message);
     }
   }
-  //   async getDepartmentList() {
-  //     const res = await department_list();
-  //     if (res && res.code == 200) {
-  //       this.departmentList = res.data;
-  //     } else {
-  //       message.error(res.message);
-  //     }
-  //   }
+  async getProfessionalList() {
+    const res = await professional_list();
+    if (res && res.code == 200) {
+      this.professionalList = res.data;
+    } else {
+      message.error(res.message);
+    }
+  }
 
   async getDoctorDetail(id: string) {
     const res = await doctor_detail(id);
     if (res && res.code == 200) {
       this.form = res.data;
+      this.refUpload.setFile(res.data.picture, 1);
     } else {
       message.error(res.message);
     }
@@ -91,9 +96,10 @@ class SetDoctor extends Define<Emits> {
       skilled: "",
       picture: "",
       departmentId: null,
-      professionalIds: "",
+      professionalIds: [],
       introduction: "",
     };
+    this.refUpload.setFile([], 0);
   }
 }
 </script>
@@ -139,6 +145,19 @@ defineExpose({
           />
         </a-form-item>
         <a-form-item
+          label="相关职称"
+          name="professionalIds"
+          :rules="[{ required: true, message: '请选择相关职称!' }]"
+        >
+          <a-select
+            v-model:value="sd.form.professionalIds"
+            :options="sd.professionalList"
+            :fieldNames="{ label: 'name', value: 'id' }"
+            mode="tags"
+            placeholder="请选择相关职称!"
+          />
+        </a-form-item>
+        <a-form-item
           label="名称"
           name="name"
           :rules="[{ required: true, message: '请填写医师名称!' }]"
@@ -157,7 +176,7 @@ defineExpose({
         </a-form-item>
         <a-form-item
           label="头像"
-          name="skilled"
+          name="picture"
           :rules="[{ required: true, message: '请上传头像!' }]"
         >
           <Upload
@@ -167,7 +186,7 @@ defineExpose({
         </a-form-item>
         <a-form-item
           label="简介"
-          name="skilled"
+          name="introduction"
           :rules="[{ required: true, message: '请填写简介!' }]"
         >
           <a-textarea

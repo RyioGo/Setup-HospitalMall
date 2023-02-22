@@ -4,15 +4,18 @@ import { defineComponent, onMounted } from "vue";
 import { Setup, Context, PassOnTo } from "vue-class-setup";
 import { message } from "ant-design-vue";
 //  for you api
-import { doctor_delete, doctor_selectPage } from "@/api/doctor";
+import {
+  professional_delete,
+  professional_selectPage,
+} from "@/api/professional";
 import { columns } from "./config";
 
 import type { pagination_type } from "@/types/common";
-import type { edit_type } from "@/types/doctor";
+import type { edit_type } from "@/types/professional";
 //  for you components
-import SetDoctor from "./components/SetDoctor.vue";
+import SetProfessional from "./components/SetProfessional.vue";
 @Setup
-class DoctorView extends Context {
+class ProfessionalView extends Context {
   columns = columns;
   data: edit_type[] = [];
   page: pagination_type = {
@@ -24,15 +27,15 @@ class DoctorView extends Context {
 
   loading = false;
 
-  setDoctorRef!: any;
+  setProfessionalRef!: any;
 
-  openSetDoctor(type: string, id?: string) {
-    this.setDoctorRef.toggleShow(type, id);
+  openSetProfessional(type: string, id?: string) {
+    this.setProfessionalRef.toggleShow(type, id);
   }
 
   async getDataList() {
     this.loading = true;
-    const res = await doctor_selectPage(this.page);
+    const res = await professional_selectPage(this.page);
     if (res && res.code == 200) {
       this.data = res.data;
     } else {
@@ -41,8 +44,8 @@ class DoctorView extends Context {
     this.loading = false;
   }
 
-  async delDoctor(id: string) {
-    const res = await doctor_delete(id);
+  async delProfessional(id: string) {
+    const res = await professional_delete(id);
     if (res && res.code == 200) {
       this.getDataList();
       message.success(res.message);
@@ -58,16 +61,20 @@ class DoctorView extends Context {
 }
 
 export default defineComponent({
-  components: { SetDoctor },
-  ...DoctorView.inject(),
+  components: { SetProfessional },
+  ...ProfessionalView.inject(),
 });
 </script>
 
 <template>
   <div class="page-body">
-    <a-card title="医师管理" :bordered="false">
+    <a-card title="职称管理" :bordered="false">
       <div class="action">
-        <a-button type="primary" shape="round" @click="openSetDoctor('add')">
+        <a-button
+          type="primary"
+          shape="round"
+          @click="openSetProfessional('add')"
+        >
           添加
         </a-button>
       </div>
@@ -80,14 +87,17 @@ export default defineComponent({
       >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'actions'">
-            <a-button type="link" @click="openSetDoctor('edit', record.id)">
+            <a-button
+              type="link"
+              @click="openSetProfessional('edit', record.id)"
+            >
               编辑
             </a-button>
             <a-popconfirm
               title="确认删除?"
               ok-text="确认"
               cancel-text="取消"
-              @confirm="delDoctor(record.id)"
+              @confirm="delProfessional(record.id)"
             >
               <a-button type="link" danger>删除</a-button>
             </a-popconfirm>
@@ -95,7 +105,10 @@ export default defineComponent({
         </template>
       </a-table>
     </a-card>
-    <SetDoctor :ref="(el) => (setDoctorRef = el)" @list="getDataList" />
+    <SetProfessional
+      :ref="(el) => (setProfessionalRef = el)"
+      @list="getDataList"
+    />
   </div>
 </template>
 

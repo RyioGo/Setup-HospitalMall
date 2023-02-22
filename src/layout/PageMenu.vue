@@ -13,11 +13,11 @@ class PageMenu extends Context {
   collapsed = stateModule.collapsed;
   openKeys = [];
   selectedKeys = [];
-  route = useRouter();
+  router = useRouter();
 
   toPath({ key, keyPath }: { key: string; keyPath: string[] }) {
     console.log(this.openKeys, this.selectedKeys);
-    this.route.push(key);
+    this.router.push(key);
   }
 }
 
@@ -54,6 +54,7 @@ export default defineComponent({
 .page-menu {
   height: calc(100vh - 64px);
   overflow-y: auto;
+  overflow-x: hidden;
   padding-top: 16px;
   box-sizing: border-box;
   background-color: transparent;

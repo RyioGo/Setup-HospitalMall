@@ -6,13 +6,12 @@ import { message } from "ant-design-vue";
 //  for you api
 import { doctor_delete, doctor_selectPage } from "@/api/doctor";
 import { columns } from "./config";
-
 import type { pagination_type } from "@/types/common";
 import type { edit_type } from "@/types/doctor";
 //  for you components
-import SetDoctor from "./components/SetDoctor.vue";
+
 @Setup
-class DoctorView extends Context {
+class GoodsView extends Context {
   columns = columns;
   data: edit_type[] = [];
   page: pagination_type = {
@@ -23,43 +22,10 @@ class DoctorView extends Context {
   };
 
   loading = false;
-
-  setDoctorRef!: any;
-
-  openSetDoctor(type: string, id?: string) {
-    this.setDoctorRef.toggleShow(type, id);
-  }
-
-  async getDataList() {
-    this.loading = true;
-    const res = await doctor_selectPage(this.page);
-    if (res && res.code == 200) {
-      this.data = res.data;
-    } else {
-      message.error(res.message);
-    }
-    this.loading = false;
-  }
-
-  async delDoctor(id: string) {
-    const res = await doctor_delete(id);
-    if (res && res.code == 200) {
-      this.getDataList();
-      message.success(res.message);
-    } else {
-      message.error(res.message);
-    }
-  }
-
-  @PassOnTo(onMounted)
-  onMountedRun() {
-    this.getDataList();
-  }
 }
 
 export default defineComponent({
-  components: { SetDoctor },
-  ...DoctorView.inject(),
+  ...GoodsView.inject(),
 });
 </script>
 
@@ -95,7 +61,7 @@ export default defineComponent({
         </template>
       </a-table>
     </a-card>
-    <SetDoctor :ref="(el) => (setDoctorRef = el)" @list="getDataList" />
+    <!-- <SetDoctor :ref="(el) => (setDoctorRef = el)" @list="getDataList" /> -->
   </div>
 </template>
 

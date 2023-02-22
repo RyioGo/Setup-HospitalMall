@@ -28,7 +28,7 @@ export default defineComponent({
       <div class="logo" />
       <PageMenu />
     </a-layout-sider>
-    <a-layout class="transparent">
+    <a-layout class="transparent layout-main">
       <a-layout-header class="header transparent">
         <PageHeader />
       </a-layout-header>
@@ -50,6 +50,7 @@ export default defineComponent({
 
 <style scoped lang="less">
 .layout {
+  overflow-x: hidden;
   width: 100vw;
   height: 100vh;
   background-color: #f5f4ee;
@@ -61,6 +62,8 @@ export default defineComponent({
   );
 
   .sider {
+    width: 100%;
+    overflow-x: hidden;
     .logo {
       height: 64px;
       background: rgba(179, 179, 179, 0.2);
@@ -71,11 +74,14 @@ export default defineComponent({
       overflow-y: scroll;
     }
   }
-  .header {
-    padding: 0 16px;
-  }
-  .container {
-    margin: 16px;
+  .layout-main {
+    overflow-y: scroll;
+    .header {
+      padding: 0 16px;
+    }
+    .container {
+      margin: 16px;
+    }
   }
 }
 </style>

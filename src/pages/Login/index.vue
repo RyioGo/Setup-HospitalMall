@@ -1,6 +1,7 @@
 <script lang="ts">
 // for node_modules api
 import { defineComponent, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import { Setup, Context, PassOnTo } from "vue-class-setup";
 import { message } from "ant-design-vue";
 // 导入背景模块
@@ -16,6 +17,7 @@ import storage from "@/libs/StorageClient";
 
 @Setup
 class LoginView extends Context {
+  router = useRouter();
   // 登录背景实例
   clouds: any = null;
   // 用户账户
@@ -48,7 +50,7 @@ class LoginView extends Context {
         storage.set("headPicture", res.data.headPicture);
         this.loading = false;
         // 完成登录
-        window.location.href = "/base/index";
+        this.router.replace("/base/index");
       });
     } else {
       load.then(() => {

@@ -9,10 +9,10 @@ import { userModule } from "@/store/modules/user";
 import utils from "@/libs/UtilsClient";
 import routes from "./base";
 
-const { MODE } = import.meta.env;
+const { MODE, RGBASE } = import.meta.env;
 
 const router = createRouter({
-  history: createWebHashHistory("/mall/"),
+  history: createWebHashHistory(RGBASE),
   routes,
   scrollBehavior: () => ({ left: 0, top: 0 }),
 });

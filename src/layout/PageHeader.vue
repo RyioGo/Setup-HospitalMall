@@ -9,6 +9,7 @@ import {
   UserOutlined,
   LoginOutlined,
 } from "@ant-design/icons-vue";
+import { useRouter } from "vue-router";
 //  for you api
 import { admin_logout } from "@/api/admin";
 import { userModule } from "@/store/modules/user";
@@ -17,6 +18,7 @@ import { stateModule } from "@/store/modules/state";
 
 @Setup
 class PageHeader extends Context {
+  router = useRouter();
   state = stateModule;
   user = userModule;
 
@@ -40,7 +42,7 @@ class PageHeader extends Context {
         // 设置本地存储
         window.sessionStorage.clear();
         // 完成登录
-        window.location.href = "/login";
+        this.router.replace("/login");
       });
     } else {
       load.then(() => {
