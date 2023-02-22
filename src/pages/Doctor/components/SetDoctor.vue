@@ -28,6 +28,7 @@ class SetDoctor extends Define<Emits> {
     departmentId: null,
     professionalIds: [],
     introduction: "",
+    price: 0,
   };
 
   refUpload!: any;
@@ -98,6 +99,7 @@ class SetDoctor extends Define<Emits> {
       departmentId: null,
       professionalIds: [],
       introduction: "",
+      price: 0,
     };
     this.refUpload.setFile([], 0);
   }
@@ -162,6 +164,16 @@ defineExpose({
           :rules="[{ required: true, message: '请填写医师名称!' }]"
         >
           <a-input v-model:value="sd.form.name" placeholder="请填写医师名称!" />
+        </a-form-item>
+        <a-form-item
+          label="预约价格"
+          name="price"
+          :rules="[{ required: true, message: '请填写医师名称!' }]"
+        >
+          <a-input
+            v-model:value="sd.form.price"
+            placeholder="请填写预约价格!"
+          />
         </a-form-item>
         <a-form-item
           label="擅长"

@@ -5,10 +5,24 @@ export const columns: TableColumnType[] = [
   {
     title: "名称",
     dataIndex: "name",
+    align: 'center'
   },
   {
     title: "科室",
-    dataIndex: "departmentModel.name",
+    dataIndex: "departmentModel",
+    customRender({ text }) {
+      console.log(text)
+      return text.name
+    },
+    align: 'center'
+  },
+  {
+    title: '预约价格',
+    dataIndex: 'price',
+    customRender({ text }) {
+      return '￥' + text
+    },
+    align: 'center'
   },
   {
     title: "职称",
@@ -20,6 +34,7 @@ export const columns: TableColumnType[] = [
       });
       return str.slice(0, str.length - 1);
     },
+    align: 'center'
   },
   {
     title: "头像",
@@ -27,6 +42,7 @@ export const columns: TableColumnType[] = [
     customRender({ text }) {
       return h(Avatar, { src: text }, { default: () => "U" });
     },
+    align: 'center'
   },
   {
     title: "操作",

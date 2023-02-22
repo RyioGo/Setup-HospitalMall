@@ -13,6 +13,9 @@ export const doctor_add = (data: add_type) => {
   return api.post("/order/doctor/add", qs.stringify(data), {});
 };
 export const doctor_edit = (data: edit_type) => {
+  delete data.professionalModelList
+  delete data.departmentModel
+  data.professionalIds = data.professionalIds.toString()
   return api.put("/order/doctor/update", qs.stringify(data), {});
 };
 export const doctor_delete = (id: string) => {

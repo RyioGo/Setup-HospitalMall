@@ -3,8 +3,9 @@ export interface add_type {
   skilled: string;
   picture: string;
   departmentId: number | null;
-  professionalIds: Array<string | number>;
+  professionalIds: Array<string | number> | string;
   introduction: string;
+  price: number;
 }
 
 export interface edit_type extends add_type {
