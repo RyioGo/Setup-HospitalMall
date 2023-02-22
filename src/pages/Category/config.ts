@@ -3,29 +3,18 @@ import { Avatar } from "ant-design-vue";
 import type { TableColumnType } from "ant-design-vue";
 export const columns: TableColumnType[] = [
   {
+    title: "编号",
+    dataIndex: "id",
+  },
+  {
     title: "名称",
     dataIndex: "name",
   },
   {
-    title: "科室",
-    dataIndex: "departmentModel.name",
-  },
-  {
-    title: "职称",
-    dataIndex: "professionalModelList",
+    title: "图标",
+    dataIndex: "icon",
     customRender({ text }) {
-      let str = "";
-      text.forEach((item: { name: string }) => {
-        str += item.name + "、";
-      });
-      return str.slice(0, str.length - 1);
-    },
-  },
-  {
-    title: "头像",
-    dataIndex: "picture",
-    customRender({ text }) {
-      return h(Avatar, { src: text }, { default: () => "U" });
+      return h(Avatar, { src: text }, { default: () => "图" });
     },
   },
   {
