@@ -22,11 +22,11 @@ const loaderDirective: Directive = {
   },
 };
 
-function addDom(el) {
+function addDom(el: any) {
   el.appendChild(el.instance.$el);
 }
 
-function delDom(el) {
+function delDom(el: any) {
   el?.removeChild(el.instance.$el);
 }
 

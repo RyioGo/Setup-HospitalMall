@@ -12,8 +12,9 @@ import routes from "./base";
 const { MODE } = import.meta.env;
 
 const router = createRouter({
-  history: MODE == "development" ? createWebHistory() : createWebHashHistory(),
+  history: createWebHashHistory("/mall/"),
   routes,
+  scrollBehavior: () => ({ left: 0, top: 0 }),
 });
 
 router.beforeEach(async (to, from, next) => {

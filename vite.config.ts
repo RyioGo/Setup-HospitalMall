@@ -5,6 +5,7 @@ import path from "path";
 
 export default defineConfig(({ command, mode }) => {
   return {
+    base: "/mall/",
     plugins: [vue()],
     // 环境变量别名
     envPrefix: "RG",
