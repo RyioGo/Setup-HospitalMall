@@ -34,7 +34,7 @@ class SetGoods extends Define<Emits> {
   async getCategoryDetail(id: string) {
     const res = await category_detail(id);
     if (res && res.code == 200) {
-      this.form = res.data;
+      this.form = { name: res.data.name, icon: res.data.icon, id: res.data.id };
       this.refUpload.setFile(res.data.icon, 1);
     } else {
       message.error(res.message);
