@@ -4,36 +4,40 @@ import { defineComponent, onMounted } from "vue";
 import { Setup, Context, PassOnTo } from "vue-class-setup";
 import { message } from "ant-design-vue";
 //  for you api
-import { department_delete, department_selectPage } from "@/api/department";
 
+import { appointment_cancel, appointment_selectPage } from "@/api/appointment";
 import { columns } from "./config";
+
 import type { pagination_type } from "@/types/common";
-import type { edit_type } from "@/types/department";
+import type { edit_type } from "@/types/appointment";
 //  for you components
-import SetDepartment from "./components/SetDepartment.vue";
+import SetAppointment from "./components/SetAppointment.vue";
+
 @Setup
-class DepartmentView extends Context {
+class AppointmentView extends Context {
   columns = columns;
   data: edit_type[] = [];
   page: pagination_type = {
     "show-size-changer": true,
-    pageSize: 1,
-    pageNum: 10,
+    pageSize: 10,
+    pageNum: 1,
     total: 0,
-    param: {},
+    param: {
+      hjb: "",
+    },
   };
 
   loading = false;
 
-  setDepartmentRef!: any;
+  setAppointmentRef!: any;
 
-  openSetDepartment(type: string, id?: string) {
-    this.setDepartmentRef.toggleShow(type, id);
+  openSetAppointment(type: string, id?: string) {
+    this.setAppointmentRef.toggleShow(type, id);
   }
 
   async getDataList() {
     this.loading = true;
-    const res = await department_selectPage(this.page);
+    const res = await appointment_selectPage(this.page);
     if (res && res.code == 200) {
       this.data = res.data;
     } else {
@@ -42,8 +46,8 @@ class DepartmentView extends Context {
     this.loading = false;
   }
 
-  async delDepartment(id: string) {
-    const res = await department_delete(id);
+  async cancelAppointment(id: string) {
+    const res = await appointment_cancel(id);
     if (res && res.code == 200) {
       this.getDataList();
       message.success(res.message);
@@ -59,23 +63,23 @@ class DepartmentView extends Context {
 }
 
 export default defineComponent({
-  components: { SetDepartment },
-  ...DepartmentView.inject(),
+  components: { SetAppointment },
+  ...AppointmentView.inject(),
 });
 </script>
 
 <template>
   <div class="page-body">
-    <a-card title="科室管理" :bordered="false">
-      <div class="action">
+    <a-card title="预约记录" :bordered="false">
+      <!-- <div class="action">
         <a-button
           type="primary"
           shape="round"
-          @click="openSetDepartment('add')"
+          @click="openSetAppointment('add')"
         >
           添加
         </a-button>
-      </div>
+      </div> -->
       <a-table
         rowKey="id"
         :loading="loading"
@@ -85,23 +89,28 @@ export default defineComponent({
       >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'actions'">
-            <a-button type="link" @click="openSetDepartment('edit', record.id)">
+            <a-button
+              type="link"
+              @click="openSetAppointment('edit', record.id)"
+            >
               编辑
             </a-button>
             <a-popconfirm
-              title="确认删除?"
+              title="确认取消?"
               ok-text="确认"
               cancel-text="取消"
-              @confirm="delDepartment(record.id)"
+              @confirm="cancelAppointment(record.id)"
             >
-              <a-button type="link" danger>删除</a-button>
+              <a-button type="link" danger>取消</a-button>
             </a-popconfirm>
           </template>
         </template>
       </a-table>
     </a-card>
-    <!-- 功能区 -->
-    <SetDepartment :ref="(el) => (setDepartmentRef = el)" @list="getDataList" />
+    <SetAppointment
+      :ref="(el) => (setAppointmentRef = el)"
+      @list="getDataList"
+    />
   </div>
 </template>
 

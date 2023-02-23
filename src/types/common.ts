@@ -4,5 +4,7 @@ export interface pagination_type {
   pageNum: number;
   total: number;
   current?: number;
-  [x: string]: any;
+  param: {
+    [x: string]: any;
+  };
 }

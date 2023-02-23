@@ -20,6 +20,7 @@ class DoctorView extends Context {
     pageSize: 10,
     pageNum: 1,
     total: 0,
+    param: {},
   };
 
   loading = false;

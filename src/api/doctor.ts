@@ -13,11 +13,18 @@ export const doctor_add = (data: add_type) => {
   return api.post("/order/doctor/add", qs.stringify(data), {});
 };
 export const doctor_edit = (data: edit_type) => {
-  delete data.professionalModelList
-  delete data.departmentModel
-  data.professionalIds = data.professionalIds.toString()
-  return api.put("/order/doctor/update", qs.stringify(data), {});
+  const params = { ...data, professionalIds: data.professionalIds.toString() };
+  return api.put("/order/doctor/update", qs.stringify(params), {});
 };
 export const doctor_delete = (id: string) => {
   return api.delete(`/order/doctor/delete/${id}`);
+};
+export const doctor_list = (
+  departmentId: string = "",
+  professionalId: string = ""
+) => {
+  return api.get<edit_type[]>(
+    "/order/doctor/listAll" +
+      `?departmentId=${departmentId}&professionalId=${professionalId}`
+  );
 };

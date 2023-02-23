@@ -7,6 +7,7 @@ import { message } from "ant-design-vue";
 import { department_list } from "@/api/department";
 import { professional_list } from "@/api/professional";
 import { doctor_detail, doctor_add, doctor_edit } from "@/api/doctor";
+import utils from "@/libs/UtilsClient";
 import type { edit_type } from "@/types/doctor";
 import type * as departmentType from "@/types/department";
 import type * as professionalType from "@/types/professional";
@@ -63,7 +64,8 @@ class SetDoctor extends Define<Emits> {
   async getDoctorDetail(id: string) {
     const res = await doctor_detail(id);
     if (res && res.code == 200) {
-      this.form = res.data;
+      utils.objectCopyValue(this.form, res.data);
+
       this.refUpload.setFile(res.data.picture, 1);
     } else {
       message.error(res.message);
@@ -153,6 +155,7 @@ defineExpose({
         >
           <a-select
             v-model:value="sd.form.professionalIds"
+            mode="multiple"
             :options="sd.professionalList"
             :fieldNames="{ label: 'name', value: 'id' }"
             placeholder="请选择相关职称!"
@@ -170,9 +173,11 @@ defineExpose({
           name="price"
           :rules="[{ required: true, message: '请填写医师名称!' }]"
         >
-          <a-input
+          <a-input-number
+            style="width: 100%"
             v-model:value="sd.form.price"
             placeholder="请填写预约价格!"
+            :min="1"
           />
         </a-form-item>
         <a-form-item

@@ -3,7 +3,7 @@ export interface add_type {
   skilled: string;
   picture: string;
   departmentId: number | null;
-  professionalIds: Array<string | number> | string;
+  professionalIds: Array<number>;
   introduction: string;
   price: number;
 }

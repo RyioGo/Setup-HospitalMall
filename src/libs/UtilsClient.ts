@@ -23,6 +23,21 @@ class UtilsClient {
     });
     return true;
   }
+  //  根据数据对象将相同  key 字段的 value 进行深度赋值,适用于调取详情接口后的res.data赋值操作
+  //  reactive响应时可以不需要接收返回值。
+  objectCopyValue(
+    orgin: { [x: string]: any },
+    result: { [x: string]: any }
+  ): any {
+    Object.keys(orgin).forEach((item: string) => {
+      if (this.typeOf(result[item]) == "object") {
+        orgin[item] = this.objectCopyValue(orgin[item], result[item]);
+      } else {
+        orgin[item] = JSON.parse(JSON.stringify(result[item]));
+      }
+    });
+    return orgin;
+  }
 }
 
 export default new UtilsClient();

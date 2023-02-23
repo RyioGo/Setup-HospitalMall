@@ -93,14 +93,14 @@ export default defineComponent({
           <a-avatar shape="square" :src="user.headPicture" />
           <template #overlay>
             <a-menu>
-              <a-menu-item key="1">
+              <!-- <a-menu-item key="1">
                 <UserOutlined />
-                <span>个人中心</span>
+                <span style="margin-left: 8px">个人中心</span>
               </a-menu-item>
-              <a-menu-divider />
+              <a-menu-divider /> -->
               <a-menu-item key="2" style="color: red" @click="loginOut()">
                 <LoginOutlined />
-                <span>退出登录</span>
+                <span style="margin-left: 8px">退出登录</span>
               </a-menu-item>
             </a-menu>
           </template>
