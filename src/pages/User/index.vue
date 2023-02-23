@@ -5,20 +5,23 @@ import { Setup, Context, PassOnTo } from "vue-class-setup";
 import { message } from "ant-design-vue";
 //  for you api
 import { user_selectPage } from "@/api/user";
-import { columns } from "./config";
+import { columns, filterData } from "./config";
 import type { pagination_type } from "@/types/common";
 import type { edit_type } from "@/types/user";
 //  for you components
 import SetUser from "./components/SetUser.vue";
+
+import FilterData from "@/components/FilterData/index.vue";
 @Setup
 class UserView extends Context {
   columns = columns;
+  filterData = filterData;
   data: edit_type[] = [];
   page: pagination_type = {
-    "show-size-changer": true,
-    pageSize: 1,
-    pageNum: 10,
+    pageSize: 10,
+    pageNum: 1,
     total: 0,
+    param: {},
   };
 
   loading = false;
@@ -29,11 +32,22 @@ class UserView extends Context {
     this.setUserRef.toggleShow(type, id);
   }
 
+  change(page: pagination_type) {
+    this.page.pageNum = page.current as number;
+    this.page.pageSize = page.pageSize;
+    this.getDataList();
+  }
+
   async getDataList() {
     this.loading = true;
     const res = await user_selectPage(this.page);
     if (res && res.code == 200) {
       this.data = res.data;
+      this.page.total = res.total;
+      if (res.data.length == 0 && this.page.pageNum > 1) {
+        this.page.pageNum--;
+        this.getDataList();
+      }
     } else {
       message.error(res.message);
     }
@@ -47,7 +61,7 @@ class UserView extends Context {
 }
 
 export default defineComponent({
-  components: { SetUser },
+  components: { SetUser, FilterData },
   ...UserView.inject(),
 });
 </script>
@@ -55,6 +69,11 @@ export default defineComponent({
 <template>
   <div class="page-body">
     <a-card title="会员管理" :bordered="false">
+      <FilterData
+        :filter-data="filterData"
+        v-model:value="page.param"
+        @list="getDataList"
+      />
       <!-- <div class="action">
         <a-button type="primary" shape="round" @click="openSetAdmin('add')">
           添加
@@ -66,6 +85,7 @@ export default defineComponent({
         :pagination="page"
         :dataSource="data"
         :columns="columns"
+        @change="change"
       >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'actions'">

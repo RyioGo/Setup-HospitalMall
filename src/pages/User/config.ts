@@ -1,11 +1,26 @@
 import { h } from "vue";
-import { Tag } from "ant-design-vue";
+import { Tag, Avatar } from "ant-design-vue";
 import type { TableColumnType } from "ant-design-vue";
+import type { filter_data_type } from "@/types/common";
+
 export const columns: TableColumnType[] = [
+  {
+    title: "昵称",
+    dataIndex: "nickname",
+    width: 120,
+  },
   {
     title: "名称",
     dataIndex: "name",
     width: 120,
+  },
+  {
+    title: "头像",
+    dataIndex: "headPicture",
+    align: "center",
+    customRender({ text }) {
+      return h(Avatar, { src: text }, { default: () => "U" });
+    },
   },
   {
     title: "性别",
@@ -63,3 +78,5 @@ export const columns: TableColumnType[] = [
     width: 240,
   },
 ];
+
+export const filterData: filter_data_type[] = [];

@@ -4,7 +4,11 @@ import type { pagination_type } from "@/types/common";
 import { add_type, edit_type } from "@/types/user_type";
 
 export const user_type_selectPage = (data: pagination_type) => {
-  return api.post<edit_type[]>("/user/merberType/selectPage", data, {});
+  return api.post<edit_type[]>(
+    "/user/merberType/selectPage",
+    qs.stringify(data),
+    {}
+  );
 };
 export const user_type_detail = (id: string) => {
   return api.get<edit_type>(`/user/merberType/detail/${id}`);

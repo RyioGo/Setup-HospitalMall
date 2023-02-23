@@ -5,10 +5,10 @@ import { Setup, Define } from "vue-class-setup";
 import { message } from "ant-design-vue";
 //  for you api
 import { user_detail, user_edit } from "@/api/user";
+import utils from "@/libs/UtilsClient";
 import type { edit_type } from "@/types/user";
-
 //  for you components
-
+import Upload from "@/components/Upload/index.vue";
 @Setup
 class SetUser extends Define<Emits> {
   visible = false;
@@ -19,6 +19,10 @@ class SetUser extends Define<Emits> {
     status: null,
     balance: null,
     integral: null,
+    nickname: "",
+    headPicture: "",
+    sex: "",
+    name: "",
   };
   roleList = [];
 
@@ -56,7 +60,9 @@ class SetUser extends Define<Emits> {
   async getUserDetail(id: string) {
     const res = await user_detail(id);
     if (res && res.code == 200) {
-      this.form = res.data;
+      utils.objectCopyValue(this.form, res.data);
+      this.form.id = res.data.id;
+      this.refUpload.setFile(res.data.headPicture, 1);
     } else {
       message.error(res.message);
     }
@@ -67,7 +73,12 @@ class SetUser extends Define<Emits> {
       status: null,
       balance: null,
       integral: null,
+      nickname: "",
+      headPicture: "",
+      sex: "",
+      name: "",
     };
+    this.refUpload.setFile([], 0);
   }
 }
 </script>
@@ -100,6 +111,20 @@ defineExpose({
         :wrapper-col="{ span: 18 }"
         @finish="su.onFinish"
       >
+        <a-form-item
+          label="昵称"
+          name="nickname"
+          :rules="[{ required: true, message: '请填写昵称!' }]"
+        >
+          <a-input v-model:value="su.form.nickname" placeholder="请填写昵称!" />
+        </a-form-item>
+        <a-form-item
+          label="名称"
+          name="name"
+          :rules="[{ required: true, message: '请填写名称!' }]"
+        >
+          <a-input v-model:value="su.form.name" placeholder="请填写名称!" />
+        </a-form-item>
         <a-form-item
           label="余额"
           name="balance"
@@ -135,7 +160,26 @@ defineExpose({
             <a-radio-button :value="0">黑名单</a-radio-button>
           </a-radio-group>
         </a-form-item>
-
+        <a-form-item
+          label="性别"
+          name="sex"
+          :rules="[{ required: true, message: '请选择性别!' }]"
+        >
+          <a-radio-group v-model:value="su.form.sex" button-style="solid">
+            <a-radio-button :value="1">男</a-radio-button>
+            <a-radio-button :value="0">女</a-radio-button>
+          </a-radio-group>
+        </a-form-item>
+        <a-form-item
+          label="头像"
+          name="headPicture"
+          :rules="[{ required: true, message: '请上传头像!' }]"
+        >
+          <Upload
+            v-model:value="su.form.headPicture"
+            :ref="(el) => (su.refUpload = el)"
+          />
+        </a-form-item>
         <a-form-item :wrapper-col="{ offset: 6, span: 18 }">
           <a-button :loading="su.loading" type="primary" html-type="submit">
             保存

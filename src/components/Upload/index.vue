@@ -5,9 +5,7 @@ import { PlusOutlined } from "@ant-design/icons-vue";
 import type { UploadFile } from "ant-design-vue";
 
 //  for you api
-
 import { userModule } from "@/store/modules/user";
-
 //  for you components
 
 interface Props {
@@ -61,6 +59,8 @@ const change = ({ file, fileList }: { file: any; fileList: any }) => {
         })
       );
     }
+  } else {
+    file.status = "error";
   }
 };
 

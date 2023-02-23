@@ -40,7 +40,11 @@ export const admin_detail = (id: string) => {
 };
 
 export const admin_selectPage = (data: pagination_type) => {
-  return api.post<edit_type[]>("/system/admin/selectPage", data, {});
+  return api.post<edit_type[]>(
+    "/system/admin/selectPage",
+    qs.stringify(data),
+    {}
+  );
 };
 
 export const admin_delete = (id: string) => {

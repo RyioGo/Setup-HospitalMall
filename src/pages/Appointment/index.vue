@@ -6,25 +6,24 @@ import { message } from "ant-design-vue";
 //  for you api
 
 import { appointment_cancel, appointment_selectPage } from "@/api/appointment";
-import { columns } from "./config";
+import { columns, filterData } from "./config";
 
 import type { pagination_type } from "@/types/common";
 import type { edit_type } from "@/types/appointment";
 //  for you components
 import SetAppointment from "./components/SetAppointment.vue";
 
+import FilterData from "@/components/FilterData/index.vue";
 @Setup
 class AppointmentView extends Context {
   columns = columns;
+  filterData = filterData;
   data: edit_type[] = [];
   page: pagination_type = {
-    "show-size-changer": true,
     pageSize: 10,
     pageNum: 1,
     total: 0,
-    param: {
-      hjb: "",
-    },
+    param: {},
   };
 
   loading = false;
@@ -35,11 +34,22 @@ class AppointmentView extends Context {
     this.setAppointmentRef.toggleShow(type, id);
   }
 
+  change(page: pagination_type) {
+    this.page.pageNum = page.current as number;
+    this.page.pageSize = page.pageSize;
+    this.getDataList();
+  }
+
   async getDataList() {
     this.loading = true;
     const res = await appointment_selectPage(this.page);
     if (res && res.code == 200) {
       this.data = res.data;
+      this.page.total = res.total;
+      if (res.data.length == 0 && this.page.pageNum > 1) {
+        this.page.pageNum--;
+        this.getDataList();
+      }
     } else {
       message.error(res.message);
     }
@@ -63,7 +73,7 @@ class AppointmentView extends Context {
 }
 
 export default defineComponent({
-  components: { SetAppointment },
+  components: { SetAppointment, FilterData },
   ...AppointmentView.inject(),
 });
 </script>
@@ -71,6 +81,11 @@ export default defineComponent({
 <template>
   <div class="page-body">
     <a-card title="预约记录" :bordered="false">
+      <FilterData
+        :filter-data="filterData"
+        v-model:value="page.param"
+        @list="getDataList"
+      />
       <!-- <div class="action">
         <a-button
           type="primary"
@@ -86,6 +101,7 @@ export default defineComponent({
         :pagination="page"
         :dataSource="data"
         :columns="columns"
+        @change="change"
       >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'actions'">

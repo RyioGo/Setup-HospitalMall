@@ -20,7 +20,11 @@ export const role_detail = (id: string) => {
 };
 
 export const role_selectPage = (data: pagination_type) => {
-  return api.post<edit_type[]>("/system/role/selectPage", data, {});
+  return api.post<edit_type[]>(
+    "/system/role/selectPage",
+    qs.stringify(data),
+    {}
+  );
 };
 
 export const role_delete = (id: string) => {

@@ -6,21 +6,24 @@ import { message } from "ant-design-vue";
 //  for you api
 import { role_delete, role_selectPage } from "@/api/role";
 
-import { columns } from "./config";
+import { columns, filterData } from "./config";
 import type { pagination_type } from "@/types/common";
 import type { edit_type } from "@/types/role";
 //  for you components
 import SetMenuRole from "./components/SetMenuRole.vue";
 import SetRole from "./components/SetRole.vue";
+
+import FilterData from "@/components/FilterData/index.vue";
 @Setup
 class RoleView extends Context {
   columns = columns;
+  filterData = filterData;
   data: edit_type[] = [];
   page: pagination_type = {
-    "show-size-changer": true,
-    pageSize: 1,
-    pageNum: 10,
+    pageSize: 10,
+    pageNum: 1,
     total: 0,
+    param: {},
   };
 
   loading = false;
@@ -36,11 +39,22 @@ class RoleView extends Context {
     this.setMenuRole.toggleShow(id);
   }
 
+  change(page: pagination_type) {
+    this.page.pageNum = page.current as number;
+    this.page.pageSize = page.pageSize;
+    this.getDataList();
+  }
+
   async getDataList() {
     this.loading = true;
     const res = await role_selectPage(this.page);
     if (res && res.code == 200) {
       this.data = res.data;
+      this.page.total = res.total;
+      if (res.data.length == 0 && this.page.pageNum > 1) {
+        this.page.pageNum--;
+        this.getDataList();
+      }
     } else {
       message.error(res.message);
     }
@@ -64,7 +78,7 @@ class RoleView extends Context {
 }
 
 export default defineComponent({
-  components: { SetMenuRole, SetRole },
+  components: { SetMenuRole, SetRole, FilterData },
   ...RoleView.inject(),
 });
 </script>
@@ -72,6 +86,11 @@ export default defineComponent({
 <template>
   <div class="page-body">
     <a-card title="角色管理" :bordered="false">
+      <FilterData
+        :filter-data="filterData"
+        v-model:value="page.param"
+        @list="getDataList"
+      />
       <div class="action">
         <a-button type="primary" shape="round" @click="openSetRole('add')">
           添加

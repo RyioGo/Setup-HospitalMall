@@ -4,7 +4,11 @@ import type { pagination_type } from "@/types/common";
 import { add_type, edit_type } from "@/types/professional";
 
 export const professional_selectPage = (data: pagination_type) => {
-  return api.post<edit_type[]>("/order/professional/selectPage", data, {});
+  return api.post<edit_type[]>(
+    "/order/professional/selectPage",
+    qs.stringify(data),
+    {}
+  );
 };
 export const professional_detail = (id: string) => {
   return api.get<edit_type>(`/order/professional/detail/${id}`);

@@ -1,6 +1,6 @@
 <script lang="ts">
 //  for node_modules api
-
+import dayjs, { Dayjs } from "dayjs";
 import { Setup, Define } from "vue-class-setup";
 import { message } from "ant-design-vue";
 //  for you api
@@ -87,6 +87,7 @@ class SetAppointment extends Define<Emits> {
     const res = await appointment_detail(id);
     if (res && res.code == 200) {
       utils.objectCopyValue(this.form, res.data);
+      this.form.id = id;
       this.getDoctorList((res.data as any).doctorModel.departmentId);
     } else {
       message.error(res.message);
@@ -158,6 +159,18 @@ defineExpose({
             v-model:value="sa.form.phone"
             placeholder="请填写预约电话!"
             :min="1"
+          />
+        </a-form-item>
+        <a-form-item
+          label="预约时间"
+          name="orderTime"
+          :rules="[{ required: true, message: '请选择预约时间!' }]"
+        >
+          <a-date-picker
+            v-model:value="sa.form.orderTime"
+            valueFormat="YYYY-MM-DD HH:mm:ss"
+            :show-time="{ defaultValue: dayjs('00:00:00', 'HH:mm:ss') }"
+            placeholder="请选择预约时间!"
           />
         </a-form-item>
         <a-form-item

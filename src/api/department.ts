@@ -4,7 +4,11 @@ import type { pagination_type } from "@/types/common";
 import { add_type, edit_type } from "@/types/department";
 
 export const department_selectPage = (data: pagination_type) => {
-  return api.post<edit_type[]>("/order/department/selectPage", data, {});
+  return api.post<edit_type[]>(
+    "/order/department/selectPage",
+    qs.stringify(data),
+    {}
+  );
 };
 export const department_detail = (id: string) => {
   return api.get<edit_type>(`/order/department/detail/${id}`);

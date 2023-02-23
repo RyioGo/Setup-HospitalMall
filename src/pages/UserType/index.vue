@@ -5,21 +5,24 @@ import { Setup, Context, PassOnTo } from "vue-class-setup";
 import { message } from "ant-design-vue";
 //  for you api
 import { user_type_delete, user_type_selectPage } from "@/api/user_type";
-import { columns } from "./config";
+import { columns, filterData } from "./config";
 
 import type { pagination_type } from "@/types/common";
 import type { edit_type } from "@/types/user_type";
 //  for you components
 import SetUserType from "./components/SetUserType.vue";
+
+import FilterData from "@/components/FilterData/index.vue";
 @Setup
 class UserTypeView extends Context {
   columns = columns;
+  filterData = filterData;
   data: edit_type[] = [];
   page: pagination_type = {
-    "show-size-changer": true,
-    pageSize: 1,
-    pageNum: 10,
+    pageSize: 10,
+    pageNum: 1,
     total: 0,
+    param: {},
   };
 
   loading = false;
@@ -30,11 +33,22 @@ class UserTypeView extends Context {
     this.setUserTypeRef.toggleShow(type, id);
   }
 
+  change(page: pagination_type) {
+    this.page.pageNum = page.current as number;
+    this.page.pageSize = page.pageSize;
+    this.getDataList();
+  }
+
   async getDataList() {
     this.loading = true;
     const res = await user_type_selectPage(this.page);
     if (res && res.code == 200) {
       this.data = res.data;
+      this.page.total = res.total;
+      if (res.data.length == 0 && this.page.pageNum > 1) {
+        this.page.pageNum--;
+        this.getDataList();
+      }
     } else {
       message.error(res.message);
     }
@@ -58,7 +72,7 @@ class UserTypeView extends Context {
 }
 
 export default defineComponent({
-  components: { SetUserType },
+  components: { SetUserType, FilterData },
   ...UserTypeView.inject(),
 });
 </script>
@@ -66,6 +80,11 @@ export default defineComponent({
 <template>
   <div class="page-body">
     <a-card title="用户类型" :bordered="false">
+      <FilterData
+        :filter-data="filterData"
+        v-model:value="page.param"
+        @list="getDataList"
+      />
       <div class="action">
         <a-button type="primary" shape="round" @click="openSetUserType('add')">
           添加
@@ -77,6 +96,7 @@ export default defineComponent({
         :pagination="page"
         :dataSource="data"
         :columns="columns"
+        @change="change"
       >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'actions'">

@@ -1,5 +1,4 @@
 export interface pagination_type {
-  "show-size-changer": boolean;
   pageSize: number;
   pageNum: number;
   total: number;
@@ -7,4 +6,12 @@ export interface pagination_type {
   param: {
     [x: string]: any;
   };
+}
+
+export interface filter_data_type {
+  label: string;
+  key: string;
+  type: number;
+  dict?: { name: string; id: number }[];
+  getDict?: Function;
 }

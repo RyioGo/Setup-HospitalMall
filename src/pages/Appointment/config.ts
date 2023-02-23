@@ -1,6 +1,7 @@
 import { h } from "vue";
 import { Tag } from "ant-design-vue";
 import type { TableColumnType } from "ant-design-vue";
+import type { filter_data_type } from "@/types/common";
 
 export const columns: TableColumnType[] = [
   {
@@ -11,6 +12,11 @@ export const columns: TableColumnType[] = [
   {
     title: "预约人员",
     dataIndex: ["userModel", "name"],
+    width: 120,
+  },
+  {
+    title: "预约电话",
+    dataIndex: "phone",
     width: 120,
   },
   {
@@ -71,5 +77,17 @@ export const columns: TableColumnType[] = [
     dataIndex: "actions",
     align: "center",
     width: 240,
+  },
+];
+export const filterData: filter_data_type[] = [
+  {
+    label: "预约单号",
+    key: "number",
+    type: 1,
+  },
+  {
+    label: "预约电话",
+    key: "phone",
+    type: 1,
   },
 ];

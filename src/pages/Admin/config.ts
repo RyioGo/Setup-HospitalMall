@@ -1,6 +1,7 @@
 import { h } from "vue";
 import { Avatar, Tag } from "ant-design-vue";
 import type { TableColumnType } from "ant-design-vue";
+import type { filter_data_type } from "@/types/common";
 
 export const columns: TableColumnType[] = [
   {
@@ -28,6 +29,7 @@ export const columns: TableColumnType[] = [
   {
     title: "头像",
     dataIndex: "headPicture",
+    align: "center",
     customRender({ text }) {
       return h(Avatar, { src: text }, { default: () => "U" });
     },
@@ -37,5 +39,27 @@ export const columns: TableColumnType[] = [
     dataIndex: "actions",
     align: "center",
     width: 240,
+  },
+];
+
+export const filterData: filter_data_type[] = [
+  {
+    label: "名称",
+    key: "name",
+    type: 1,
+  },
+  {
+    label: "账号",
+    key: "account",
+    type: 1,
+  },
+  {
+    label: "状态",
+    key: "status",
+    type: 2,
+    dict: [
+      { name: "激活", id: 1 },
+      { name: "禁用", id: 0 },
+    ],
   },
 ];

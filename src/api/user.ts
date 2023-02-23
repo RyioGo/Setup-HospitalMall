@@ -5,11 +5,11 @@ import type { pagination_type } from "@/types/common";
 import type { edit_type } from "@/types/user";
 
 export const user_selectPage = (data: pagination_type) => {
-  return api.post<edit_type[]>("/user/user/selectPage", data, {});
+  return api.post<edit_type[]>("/user/user/selectPage", qs.stringify(data), {});
 };
 
 export const user_edit = (data: edit_type) => {
-  return api.put("/user/user/modifyStatus", qs.stringify(data), {});
+  return api.put("/user/user/update", qs.stringify(data), {});
 };
 
 export const user_detail = (id: string) => {

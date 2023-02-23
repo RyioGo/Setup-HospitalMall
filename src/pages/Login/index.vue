@@ -35,7 +35,7 @@ class LoginView extends Context {
 
     if (res && res.code == 200) {
       load.then(() => {
-        message.success("验证通过，开始登录！");
+        message.success("验证通过，登录中...！");
         // 设置store商店
         userModule.SETUSERINFO({
           token: res.data.token,
