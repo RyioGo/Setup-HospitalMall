@@ -3,6 +3,7 @@
 
 import { Setup, Define } from "vue-class-setup";
 import { message } from "ant-design-vue";
+import { SettingTwoTone } from "@ant-design/icons-vue";
 //  for you api
 import { category_list } from "@/api/category";
 import { goods_detail, goods_add, goods_edit } from "@/api/goods";
@@ -10,7 +11,8 @@ import type { edit_type } from "@/types/goods";
 import type * as categoryType from "@/types/category";
 //  for you components
 import Upload from "@/components/Upload/index.vue";
-
+import SetSKU from "./SetSKU.vue";
+import SetSPU from "./SetSPU.vue";
 @Setup
 class SetGoods extends Define<Emits> {
   visible = false;
@@ -32,20 +34,23 @@ class SetGoods extends Define<Emits> {
   categoryList: categoryType.edit_type[] = [];
 
   refUpload!: any;
+  setSKURef!: any;
+  setSPURef!: any;
 
   toggleShow(type: string, id?: string) {
     this.visible = true;
     this.type = type;
     this.getCategoryList();
     if (type == "edit") {
-      this.getDoctorDetail(id!);
+      this.getGoodsDetail(id!);
     }
   }
 
-  async getDoctorDetail(id: string) {
+  async getGoodsDetail(id: string) {
     const res = await goods_detail(id);
     if (res && res.code == 200) {
       this.form = res.data;
+      this.refUpload.setFile(res.data.picture, 2);
     } else {
       message.error(res.message);
     }
@@ -94,6 +99,7 @@ class SetGoods extends Define<Emits> {
       goodsSpuModelList: [],
       goodsSkuModelList: [],
     };
+    this.refUpload.setFile([], 0);
   }
 }
 </script>
@@ -213,7 +219,48 @@ defineExpose({
             showCount
           />
         </a-form-item>
-
+        <a-form-item
+          label="SPU"
+          name="goodsSpuModelList"
+          :rules="[{ required: true, message: '请填写商品SPU!' }]"
+        >
+          <a-button
+            type="primary"
+            shape="round"
+            @click="sg.setSPURef.toggleShow()"
+          >
+            <template #icon><setting-two-tone /></template>
+            设置SPU
+          </a-button>
+          <a-tag
+            color="green"
+            style="margin-left: 8px"
+            v-if="sg.form.goodsSpuModelList.length"
+          >
+            已添加{{ sg.form.goodsSpuModelList.length }}项
+          </a-tag>
+        </a-form-item>
+        <a-form-item
+          label="SKU"
+          name="goodsSkuModelList"
+          :rules="[{ required: true, message: '请填写商品SKU!' }]"
+        >
+          <a-button
+            type="primary"
+            shape="round"
+            @click="sg.setSKURef.toggleShow()"
+          >
+            <template #icon><setting-two-tone /></template>
+            设置SKU
+          </a-button>
+          <a-tag
+            color="green"
+            style="margin-left: 8px"
+            v-if="sg.form.goodsSkuModelList.length"
+          >
+            已添加{{ sg.form.goodsSkuModelList.length }}项
+          </a-tag>
+        </a-form-item>
         <a-form-item :wrapper-col="{ offset: 6, span: 18 }">
           <a-button :loading="sg.loading" type="primary" html-type="submit">
             保存
@@ -221,6 +268,14 @@ defineExpose({
         </a-form-item>
       </a-form>
     </a-drawer>
+    <SetSKU
+      :ref="(el) => (sg.setSKURef = el)"
+      v-model:value="sg.form.goodsSkuModelList"
+    />
+    <SetSPU
+      :ref="(el) => (sg.setSPURef = el)"
+      v-model:value="sg.form.goodsSpuModelList"
+    />
   </div>
 </template>
 

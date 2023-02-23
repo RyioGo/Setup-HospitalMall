@@ -1,32 +1,48 @@
 import { h } from "vue";
-import { Avatar } from "ant-design-vue";
+import { Tag, Avatar, Image } from "ant-design-vue";
 import type { TableColumnType } from "ant-design-vue";
 export const columns: TableColumnType[] = [
   {
     title: "名称",
     dataIndex: "name",
+    ellipsis: true,
   },
   {
-    title: "科室",
-    dataIndex: "departmentModel.name",
+    title: "标题",
+    dataIndex: "title",
   },
   {
-    title: "职称",
-    dataIndex: "professionalModelList",
+    title: "价格",
+    dataIndex: "price",
+  },
+  {
+    title: "状态",
+    dataIndex: "status",
+    align: "center",
+    width: 120,
     customRender({ text }) {
-      let str = "";
-      text.forEach((item: { name: string }) => {
-        str += item.name + "、";
-      });
-      return str.slice(0, str.length - 1);
+      return h(
+        Tag,
+        {
+          color: text == 1 ? "green" : "red",
+        },
+        { default: () => (text == 1 ? "激活" : "禁用") }
+      );
     },
   },
   {
-    title: "头像",
+    title: "宣传图",
     dataIndex: "picture",
+    width: 120,
+    align: "center",
     customRender({ text }) {
-      return h(Avatar, { src: text }, { default: () => "U" });
+      return h(Image, { src: text[0] }, { default: () => "U" });
     },
+  },
+  {
+    title: "简介",
+    dataIndex: "description",
+    ellipsis: true,
   },
   {
     title: "操作",

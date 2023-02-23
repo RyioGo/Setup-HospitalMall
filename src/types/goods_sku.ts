@@ -4,7 +4,7 @@ export interface add_type {
   goodsSkuValueModelList: goodsSkuValue.edit_type[];
 }
 
-export interface edit_type {
+export interface edit_type extends add_type {
   goodsId?: string | null;
   id?: string | null;
 }

@@ -10,10 +10,10 @@ export const goods_detail = (id: string) => {
   return api.get<edit_type>(`/goods/goods/detail/${id}`);
 };
 export const goods_add = (data: add_type) => {
-  return api.post("/goods/goods/add", qs.stringify(data), {});
+  return api.post("/goods/goods/add", data, {});
 };
 export const goods_edit = (data: edit_type) => {
-  return api.put("/goods/goods/update", qs.stringify(data), {});
+  return api.put("/goods/goods/update", data, {});
 };
 export const goods_delete = (id: string) => {
   return api.delete(`/goods/goods/delete/${id}`);

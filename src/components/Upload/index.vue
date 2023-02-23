@@ -49,9 +49,18 @@ const handleCancel = () => {
   state.imageUrl = "";
 };
 
-const change = ({ file }: { file: any }) => {
+const change = ({ file, fileList }: { file: any; fileList: any }) => {
   if (file.response && file.response.code == 200) {
-    emits("update:value", file.response.data as string);
+    if (props.limit == 1) {
+      emits("update:value", file.response.data as string);
+    } else {
+      emits(
+        "update:value",
+        fileList.map((item: any) => {
+          return item.response.data as string;
+        })
+      );
+    }
   }
 };
 
@@ -100,7 +109,7 @@ defineExpose({
       @preview="handlePreview"
       @change="change"
     >
-      <plus-outlined />
+      <plus-outlined v-if="state.fileList.length < limit" />
     </a-upload>
     <a-modal
       :visible="state.visible"

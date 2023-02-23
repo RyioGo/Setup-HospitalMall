@@ -31,6 +31,8 @@ const api: HttpClient = new HttpClient(
         window.sessionStorage.clear();
         window.location.reload();
       } else {
+        window.sessionStorage.clear();
+        window.location.reload();
         message.error("服务器访问错误！");
       }
       return Promise.reject(arg);
