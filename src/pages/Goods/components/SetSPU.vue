@@ -12,25 +12,32 @@ import type * as goodsSpu from "@/types/goods_spu";
 @Setup
 class SetSPU extends Define<Props, Emits> {
   visible = false;
+  id: string = "";
 
   name = "";
   valueData = "";
 
   goodsSpuModelList: goodsSpu.edit_type[] = [];
 
-  toggleShow() {
+  toggleShow(id?: string) {
     this.visible = true;
     this.goodsSpuModelList = this.value;
+    this.id = id || "";
   }
 
   setSku() {
     if (!Boolean(this.name.trim())) return message.warning("请输入SPU名称！");
     if (!Boolean(this.valueData.trim()))
       return message.warning("请输入SPU值！");
-    this.goodsSpuModelList.push({
+
+    let obj: any = {
       name: this.name,
       value: this.valueData,
-    });
+    };
+    if (this.id) obj.goodsId = this.id;
+
+    this.goodsSpuModelList.push(obj);
+
     this.name = "";
     this.valueData = "";
   }

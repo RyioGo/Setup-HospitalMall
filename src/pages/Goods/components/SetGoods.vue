@@ -9,6 +9,7 @@ import { category_list } from "@/api/category";
 import { goods_detail, goods_add, goods_edit } from "@/api/goods";
 import type { edit_type } from "@/types/goods";
 import type * as categoryType from "@/types/category";
+import utils from "@/libs/UtilsClient";
 //  for you components
 import Upload from "@/components/Upload/index.vue";
 import SetSKU from "./SetSKU.vue";
@@ -49,7 +50,8 @@ class SetGoods extends Define<Emits> {
   async getGoodsDetail(id: string) {
     const res = await goods_detail(id);
     if (res && res.code == 200) {
-      this.form = res.data;
+      utils.objectCopyValue(this.form, res.data);
+      this.form.id = id;
       this.refUpload.setFile(res.data.picture, 2);
     } else {
       message.error(res.message);
@@ -227,7 +229,7 @@ defineExpose({
           <a-button
             type="primary"
             shape="round"
-            @click="sg.setSPURef.toggleShow()"
+            @click="sg.setSPURef.toggleShow(sg.form.id)"
           >
             <template #icon><setting-two-tone /></template>
             设置SPU
@@ -248,7 +250,7 @@ defineExpose({
           <a-button
             type="primary"
             shape="round"
-            @click="sg.setSKURef.toggleShow()"
+            @click="sg.setSKURef.toggleShow(sg.form.id)"
           >
             <template #icon><setting-two-tone /></template>
             设置SKU

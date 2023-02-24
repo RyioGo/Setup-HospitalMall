@@ -12,6 +12,7 @@ import type * as goodsSkuValue from "@/types/goods_sku_value";
 @Setup
 class SetSKU extends Define<Props, Emits> {
   visible = false;
+  id: string = "";
 
   name = "";
   valueData = "";
@@ -19,17 +20,22 @@ class SetSKU extends Define<Props, Emits> {
   activeKey: string[] = [];
   goodsSkuModelList: goodsSku.edit_type[] = [];
 
-  toggleShow() {
+  toggleShow(id?: string) {
     this.visible = true;
     this.goodsSkuModelList = this.value;
+    this.id = id || "";
   }
 
   setSku() {
     if (!Boolean(this.name.trim())) return message.warning("请先输入SKU名称！");
-    this.goodsSkuModelList.push({
+    let obj: any = {
       name: this.name,
       goodsSkuValueModelList: [],
-    });
+    };
+    if (this.id) obj.goodsId = this.id;
+
+    this.goodsSkuModelList.push(obj);
+
     this.name = "";
   }
 

@@ -29,13 +29,13 @@ class LoginView extends Context {
   loading = false;
   // 登录验证
   async onFinish() {
-    const load = message.loading("验证表单");
+    const load = message.loading("验证登录...");
     this.loading = true;
     const res = await admin_login(this.form);
 
     if (res && res.code == 200) {
       load.then(() => {
-        message.success("验证通过，登录中...！");
+        message.success("验证通过，开始登录！");
         // 设置store商店
         userModule.SETUSERINFO({
           token: res.data.token,
