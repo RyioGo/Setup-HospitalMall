@@ -93,8 +93,11 @@ export const filterData: filter_data_type[] = [
     key: "status",
     type: 2,
     dict: [
-      { name: "激活", id: 1 },
-      { name: "禁用", id: 0 },
+      { name: "待支付", id: 1 },
+      { name: "待发货", id: 2 },
+      { name: "待收货", id: 3 },
+      { name: "已完成", id: 4 },
+      { name: "已取消", id: 5 },
     ],
   },
 ];
