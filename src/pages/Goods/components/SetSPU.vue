@@ -5,6 +5,7 @@ import { Setup, Define } from "vue-class-setup";
 import { message } from "ant-design-vue";
 import { CloseOutlined } from "@ant-design/icons-vue";
 //  for you api
+import { goods_spu_delete } from "@/api/goods_spu";
 import type * as goodsSpu from "@/types/goods_spu";
 
 //  for you components
@@ -42,8 +43,17 @@ class SetSPU extends Define<Props, Emits> {
     this.valueData = "";
   }
 
-  delTag(index: number) {
-    this.goodsSpuModelList.splice(index, 1);
+  async delTag(index: number, id?: string) {
+    if (id) {
+      const res = await goods_spu_delete(id);
+      if (res && res.code == 200) {
+        this.goodsSpuModelList.splice(index, 1);
+      } else {
+        message.error(res.message);
+      }
+    } else {
+      this.goodsSpuModelList.splice(index, 1);
+    }
   }
 
   handleOk() {
@@ -90,7 +100,7 @@ defineExpose({
     >
       <template #icon>
         {{ item.name }} : {{ item.value }}
-        <span @click="sspu.delTag(index)">
+        <span @click="sspu.delTag(index, item.id)">
           <close-outlined style="cursor: pointer" />
         </span>
       </template>

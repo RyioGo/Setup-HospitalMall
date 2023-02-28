@@ -10,6 +10,7 @@ import type { pagination_type } from "@/types/common";
 import type { edit_type } from "@/types/user";
 //  for you components
 import SetUser from "./components/SetUser.vue";
+import SetHealth from "./components/SetHealth.vue";
 
 import FilterData from "@/components/FilterData/index.vue";
 @Setup
@@ -26,7 +27,12 @@ class UserView extends Context {
 
   loading = false;
 
+  setHealthRef!: any;
   setUserRef!: any;
+
+  openSetHealth(id: string) {
+    this.setHealthRef.toggleShow(id);
+  }
 
   openSetUser(type: string, id?: string) {
     this.setUserRef.toggleShow(type, id);
@@ -61,7 +67,7 @@ class UserView extends Context {
 }
 
 export default defineComponent({
-  components: { SetUser, FilterData },
+  components: { SetUser, SetHealth, FilterData },
   ...UserView.inject(),
 });
 </script>
@@ -89,6 +95,9 @@ export default defineComponent({
       >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'actions'">
+            <a-button type="link" @click="openSetHealth(record.id)">
+              健康档案
+            </a-button>
             <a-button type="link" @click="openSetUser('edit', record.id)">
               编辑
             </a-button>
@@ -96,6 +105,7 @@ export default defineComponent({
         </template>
       </a-table>
     </a-card>
+    <SetHealth :ref="(el) => (setHealthRef = el)" @list="getDataList" />
     <SetUser :ref="(el) => (setUserRef = el)" @list="getDataList" />
   </div>
 </template>

@@ -3,8 +3,11 @@
 
 import { Setup, Define } from "vue-class-setup";
 import { message } from "ant-design-vue";
-import { CloseOutlined } from "@ant-design/icons-vue";
+import { DeleteOutlined, CloseOutlined } from "@ant-design/icons-vue";
+
 //  for you api
+import { goods_sku_delete } from "@/api/goods_sku";
+import { goods_sku_value_delete } from "@/api/goods_sku_value";
 import type * as goodsSku from "@/types/goods_sku";
 import type * as goodsSkuValue from "@/types/goods_sku_value";
 //  for you components
@@ -48,8 +51,29 @@ class SetSKU extends Define<Props, Emits> {
     this.valueData = "";
   }
 
-  delTag(index: number, key: number) {
-    this.goodsSkuModelList[index].goodsSkuValueModelList.splice(key, 1);
+  async delTag(index: number, key: number, id?: string) {
+    if (id) {
+      const res = await goods_sku_value_delete(id);
+      if (res && res.code == 200) {
+        this.goodsSkuModelList[index].goodsSkuValueModelList.splice(key, 1);
+      } else {
+        message.error(res.message);
+      }
+    } else {
+      this.goodsSkuModelList[index].goodsSkuValueModelList.splice(key, 1);
+    }
+  }
+  async delGoodsSku(index: number, id?: string) {
+    if (id) {
+      const res = await goods_sku_delete(id);
+      if (res && res.code == 200) {
+        this.goodsSkuModelList.splice(index, 1);
+      } else {
+        message.error(res.message);
+      }
+    } else {
+      this.goodsSkuModelList.splice(index, 1);
+    }
   }
 
   handleOk() {
@@ -106,6 +130,12 @@ defineExpose({
         :key="index"
         :header="'SKU:' + item.name"
       >
+        <template #extra>
+          <delete-outlined
+            :style="{ color: 'red' }"
+            @click.stop="ssku.delGoodsSku(index, item.id as string)"
+          />
+        </template>
         <a-input
           v-model:value="ssku.valueData"
           :placeholder="`请填写SKU: ${item.name}的值，回车添加！`"
@@ -119,7 +149,7 @@ defineExpose({
         >
           <template #icon>
             {{ it.value }}
-            <span @click="ssku.delTag(index, ind)">
+            <span @click="ssku.delTag(index, ind, it.id as string)">
               <close-outlined style="cursor: pointer" />
             </span>
           </template>
