@@ -5,9 +5,9 @@ import { Setup, Define } from "vue-class-setup";
 import { message, TableColumnType } from "ant-design-vue";
 import { CloseOutlined } from "@ant-design/icons-vue";
 //  for you api
-import { goods_spec_list } from "@/api/goods_spec";
+import { goods_spec_list, goods_spec_add } from "@/api/goods_spec";
 
-import type { edit_type } from "@/types/goods_spec";
+import type { edit_type, add_type } from "@/types/goods_spec";
 
 import { goods_sku_list } from "@/api/goods_sku";
 
@@ -15,7 +15,7 @@ import { edit_type as editType } from "@/types/goods_sku";
 
 interface skuSelectModel {
   key: string;
-  value: number;
+  value?: string | null;
 }
 //  for you components
 
@@ -26,6 +26,7 @@ class SetSpec extends Define<Props, Emits> {
   specList: edit_type[] = [];
   goodsSkuList: editType[] = [];
   skuSelect: skuSelectModel[] = [];
+  price: number = 0;
 
   toggleShow(id: string) {
     this.visible = true;
@@ -42,6 +43,32 @@ class SetSpec extends Define<Props, Emits> {
     this.visible = false;
   }
 
+  setSku() {
+    console.log(this.skuSelect);
+    const spec: any = {};
+    const skuValueIds: [] = [];
+    this.skuSelect.forEach((item) => {
+      spec[item.key] = item.value;
+    });
+    const goodsSpec: add_type = {
+      price: this.price,
+      spec: JSON.stringify(spec),
+      name: this.name,
+      goodsId: this.id,
+      skuValueIds: "1,2",
+    };
+    this.goodsSpecAdd(goodsSpec);
+  }
+
+  async goodsSpecAdd(goodsSpec: add_type) {
+    const res = await goods_spec_add(goodsSpec);
+    if (res && res.code == 200) {
+      this.getGoodsSpecList(this.id);
+    } else {
+      message.error(res.message);
+    }
+  }
+
   async getGoodsSpecList(id: string) {
     const res = await goods_spec_list(id);
     if (res && res.code == 200) {
@@ -55,6 +82,10 @@ class SetSpec extends Define<Props, Emits> {
     const res = await goods_sku_list(id);
     if (res && res.code == 200) {
       this.goodsSkuList = res.data;
+      this.goodsSkuList.forEach((item) => {
+        const goodsSku: skuSelectModel = { key: item.name, value: "" };
+        this.skuSelect.push(goodsSku);
+      });
     } else {
       message.error(res.message);
     }
@@ -109,26 +140,25 @@ defineExpose({
       <!-- <a-input v-model:value="ssku.name" placeholder="请填写SKU名称！" />
       <a-button type="primary" @click="ssku.setSku()">添加</a-button> -->
       <a-form-item
-        v-for="(item: editType, index: number) in ssku.goodsSkuList"
+        v-for="(item, index) in ssku.goodsSkuList"
         :key="item.id"
         :label="item.name"
-        name="username"
-        :rules="[{ required: true, message: 'Please input your username!' }]"
       >
         <a-select
           ref="select"
           style="width: 120px"
-          v-model="ssku.skuSelect[index].key"
+          v-model:value="ssku.skuSelect[index].value"
         >
           <a-select-option
             v-for="child in item.goodsSkuValueModelList"
             :key="child.id"
-            :value="child.id"
+            :value="child.value"
             >{{ child.value }}</a-select-option
           >
         </a-select>
       </a-form-item>
       <a-input v-model:value="ssku.name" placeholder="请填写SKU名称！" />
+      <a-input v-model:value="ssku.price" placeholder="请填写价格" />
       <a-button type="primary" @click="ssku.setSku()">添加</a-button>
     </a-space>
     <!-- <a-collapse v-model:activeKey="ssku.activeKey" accordion>

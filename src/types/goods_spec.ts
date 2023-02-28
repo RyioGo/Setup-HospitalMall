@@ -1,7 +1,7 @@
 export interface add_type {
   name: string;
   spec: string;
-  goodsId: number | null;
+  goodsId: string | null;
   price: number | null;
   skuValueIds: string;
 }
