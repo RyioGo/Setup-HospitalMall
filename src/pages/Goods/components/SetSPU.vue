@@ -43,7 +43,7 @@ class SetSPU extends Define<Props, Emits> {
     this.valueData = "";
   }
 
-  async delTag(index: number, id?: string) {
+  async delTag(index: number, id?: string | null) {
     if (id) {
       const res = await goods_spu_delete(id);
       if (res && res.code == 200) {

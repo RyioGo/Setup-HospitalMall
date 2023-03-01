@@ -17,7 +17,7 @@ class SetRole extends Define<Emits> {
 
   form: edit_type = {
     name: "",
-    status: "",
+    status: null,
   };
 
   toggleShow(type: string, id?: string) {
@@ -59,7 +59,7 @@ class SetRole extends Define<Emits> {
   }
 
   close() {
-    this.form = { name: "", status: "" };
+    this.form = { name: "", status: null };
   }
 }
 </script>

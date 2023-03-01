@@ -113,7 +113,7 @@ export default defineComponent({
         <a-form-item class="login-btn">
           <a-button
             class="btn"
-            :ref="(el) => (setBtnRef = el)"
+            :ref="(el:any) => (setBtnRef = el)"
             block
             html-type="submit"
           >

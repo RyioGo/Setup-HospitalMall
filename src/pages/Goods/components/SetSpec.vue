@@ -20,13 +20,14 @@ interface skuSelectModel {
 //  for you components
 
 @Setup
-class SetSpec extends Define<Props, Emits> {
+class SetSpec extends Define {
   visible = false;
   id: string = "";
   specList: edit_type[] = [];
   goodsSkuList: editType[] = [];
   skuSelect: skuSelectModel[] = [];
   price: number = 0;
+  name = "";
 
   toggleShow(id: string) {
     this.visible = true;
