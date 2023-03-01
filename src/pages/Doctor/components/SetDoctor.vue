@@ -30,6 +30,7 @@ class SetDoctor extends Define<Emits> {
     professionalIds: [],
     introduction: "",
     price: 0,
+    id: "",
   };
 
   refUpload!: any;
@@ -40,6 +41,7 @@ class SetDoctor extends Define<Emits> {
     this.getDepartmentList();
     this.getProfessionalList();
     if (type == "edit") {
+      this.form.id = id;
       this.getDoctorDetail(id!);
     }
   }
