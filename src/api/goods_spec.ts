@@ -16,5 +16,5 @@ export const goods_spec_delete = (id: string) => {
   return api.delete(`/goods/goodsSpec/delete/${id}`);
 };
 export const goods_spec_list = (id: string) => {
-  return api.get<edit_type>(`/goodsSpec/list?goodsId=${id}`);
+  return api.get<edit_type[]>(`/goods/goodsSpec/list?goodsId=${id}`);
 };

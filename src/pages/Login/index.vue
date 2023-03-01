@@ -27,6 +27,9 @@ class LoginView extends Context {
   };
   // 加载
   loading = false;
+
+  setBtnRef!: any;
+
   // 登录验证
   async onFinish() {
     const load = message.loading("验证登录...");
@@ -85,7 +88,7 @@ export default defineComponent({
     <canvas id="cloud_canvas" />
     <div class="login-main" v-load="loading">
       <div class="login-title">
-        <span>欢迎访问高联振兴馆管理平台</span>
+        <span>欢迎访问老中医管理平台</span>
       </div>
       <a-form
         class="login-fields"
@@ -101,13 +104,21 @@ export default defineComponent({
         <a-form-item name="password" class="login-fields-item">
           <img class="icon" src="./img/password.png" />
           <a-input
+            @keyup.enter="setBtnRef.click()"
             type="password"
             v-model:value="form.password"
             placeholder="密码"
           />
         </a-form-item>
         <a-form-item class="login-btn">
-          <a-button class="btn" block html-type="submit"> 登 录 </a-button>
+          <a-button
+            class="btn"
+            :ref="(el) => (setBtnRef = el)"
+            block
+            html-type="submit"
+          >
+            登 录
+          </a-button>
         </a-form-item>
       </a-form>
     </div>

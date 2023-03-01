@@ -26,7 +26,7 @@ const api: HttpClient = new HttpClient(
       return arg.data;
     },
     UseError(arg: AxiosError) {
-      if (arg.response?.status == 401) {
+      if (arg.response!.status == 401) {
         message.error("访问令牌过期！");
         window.sessionStorage.clear();
         window.location.reload();

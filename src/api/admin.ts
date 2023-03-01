@@ -12,11 +12,11 @@ import {
 import { user_info_type } from "@/types/user";
 
 export const admin_login = (data: login_type) => {
-  return api.post<user_info_type>("/system/admin/login", qs.stringify(data), {
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-  });
+  return api.post<user_info_type>(
+    "/system/admin/login",
+    qs.stringify(data),
+    {}
+  );
 };
 
 export const admin_add = (data: add_type) => {
