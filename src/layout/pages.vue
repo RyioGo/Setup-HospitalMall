@@ -2,15 +2,23 @@
 //  for node_modules api
 import { defineComponent } from "vue";
 import { Setup, Context } from "vue-class-setup";
+import { useRouter } from "vue-router";
 
 //  for you api
 import { stateModule } from "@/store/modules/state";
 //  for you components
 import PageHeader from "@/layout/PageHeader.vue";
 import PageMenu from "@/layout/PageMenu.vue";
+
+import logo from "./logo.jpg";
 @Setup
 class Pages extends Context {
   state = stateModule;
+  logo = logo;
+  router = useRouter();
+  toIndex() {
+    this.router.push("/base/index");
+  }
 }
 
 export default defineComponent({
@@ -25,7 +33,10 @@ export default defineComponent({
       v-model:collapsed="state.collapsed"
       class="sider transparent"
     >
-      <div class="logo" />
+      <div class="logo" @click="toIndex()">
+        <a-avatar :size="42" :src="logo" />
+        <span style="margin-left: 8px" v-if="!state.collapsed">源真中医馆</span>
+      </div>
       <PageMenu />
     </a-layout-sider>
     <a-layout class="transparent layout-main">
@@ -65,8 +76,12 @@ export default defineComponent({
     width: 100%;
     overflow-x: hidden;
     .logo {
+      cursor: pointer;
       height: 64px;
-      background: rgba(179, 179, 179, 0.2);
+      text-align: center;
+      line-height: 64px;
+      font-size: 18px;
+      color: #666;
     }
     .menu {
       height: 80vh;

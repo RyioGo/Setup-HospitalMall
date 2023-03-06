@@ -5,7 +5,7 @@ import { useRouter } from "vue-router";
 import { Setup, Context, PassOnTo } from "vue-class-setup";
 import { message } from "ant-design-vue";
 // 导入背景模块
-import * as klouds from "klouds";
+// import * as klouds from "klouds";
 // for you api
 import { admin_login } from "@/api/admin";
 import { userModule } from "@/store/modules/user";
@@ -70,11 +70,11 @@ class LoginView extends Context {
   @PassOnTo(onMounted)
   onMountedRun() {
     //初始化背景挂载;
-    this.clouds = klouds.create({
-      selector: "#cloud_canvas",
-      speed: 1,
-      layerCount: 7,
-    });
+    // this.clouds = klouds.create({
+    //   selector: "#cloud_canvas",
+    //   speed: 1,
+    //   layerCount: 7,
+    // });
   }
 }
 
@@ -85,7 +85,7 @@ export default defineComponent({
 
 <template>
   <div class="login-body">
-    <canvas id="cloud_canvas" />
+    <!-- <canvas id="cloud_canvas" /> -->
     <div class="login-main" v-load="loading">
       <div class="login-title">
         <span>欢迎访问老中医管理平台</span>
@@ -127,6 +127,9 @@ export default defineComponent({
 
 <style scoped lang="less">
 .login-body {
+  background-image: url("./img/bg.jpg");
+  background-repeat: no-repeat;
+  background-size: center;
   position: relative;
   width: 100vw;
   height: 100vh;

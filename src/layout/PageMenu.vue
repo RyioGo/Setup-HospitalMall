@@ -3,6 +3,7 @@
 import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
 import { Setup, Context } from "vue-class-setup";
+import { CloudTwoTone } from "@ant-design/icons-vue";
 //  for you api
 import { stateModule } from "@/store/modules/state";
 //  for you components
@@ -16,7 +17,6 @@ class PageMenu extends Context {
   router = useRouter();
 
   toPath({ key, keyPath }: { key: string; keyPath: string[] }) {
-    console.log(this.openKeys, this.selectedKeys);
     this.router.push(key);
   }
 }
@@ -24,6 +24,7 @@ class PageMenu extends Context {
 export default defineComponent({
   components: {
     MenuItem,
+    CloudTwoTone,
   },
   ...PageMenu.inject(),
 });
@@ -38,6 +39,12 @@ export default defineComponent({
     :inline-collapsed="collapsed"
     @click="toPath"
   >
+    <a-menu-item key="/base/index" title="工作台">
+      <template #icon>
+        <cloud-two-tone />
+      </template>
+      <span>工作台</span>
+    </a-menu-item>
     <template v-for="item in routers">
       <MenuItem v-if="item.children && item.children.length" :routers="item" />
       <a-menu-item v-else :key="item.path" :title="item.name">
