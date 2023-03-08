@@ -12,6 +12,7 @@ import type * as categoryType from "@/types/category";
 import utils from "@/libs/UtilsClient";
 //  for you components
 import Upload from "@/components/Upload/index.vue";
+import WangEditor from "@/components/WangEditor/index.vue";
 import SetSKU from "./SetSKU.vue";
 import SetSPU from "./SetSPU.vue";
 @Setup
@@ -35,6 +36,7 @@ class SetGoods extends Define<Emits> {
   categoryList: categoryType.edit_type[] = [];
 
   refUpload!: any;
+  refEditor!: any;
   setSKURef!: any;
   setSPURef!: any;
 
@@ -53,6 +55,7 @@ class SetGoods extends Define<Emits> {
       utils.objectCopyValue(this.form, res.data);
       this.form.id = id;
       this.refUpload.setFile(res.data.picture, 2);
+      this.refEditor.setValue(res.data.description);
     } else {
       message.error(res.message);
     }
@@ -102,6 +105,7 @@ class SetGoods extends Define<Emits> {
       goodsSkuModelList: [],
     };
     this.refUpload.setFile([], 0);
+    this.refEditor.setValue("");
   }
 }
 </script>
@@ -123,7 +127,7 @@ defineExpose({
   <div class="set-doctor">
     <a-drawer
       placement="right"
-      width="420"
+      width="580"
       v-model:visible="sg.visible"
       :title="sg.type == 'add' ? '添加' : '编辑'"
       @close="sg.close()"
@@ -213,13 +217,17 @@ defineExpose({
           name="description"
           :rules="[{ required: true, message: '请填写商品简介!' }]"
         >
-          <a-textarea
+          <WangEditor
+            v-model:value="sg.form.description"
+            :ref="(el) => (sg.refEditor = el)"
+          />
+          <!-- <a-textarea
             v-model:value="sg.form.description"
             placeholder="请填写简介！"
             :rows="4"
             :maxlength="50"
             showCount
-          />
+          /> -->
         </a-form-item>
         <a-form-item
           label="SPU"

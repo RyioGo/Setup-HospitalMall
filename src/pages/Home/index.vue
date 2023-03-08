@@ -6,6 +6,7 @@ import * as echarts from "echarts";
 //  for you api
 
 //  for you components
+
 import lineConfig from "./line";
 @Setup
 class HomeView extends Context {
