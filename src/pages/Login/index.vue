@@ -129,7 +129,7 @@ export default defineComponent({
 .login-body {
   background-image: url("./img/bg.jpg");
   background-repeat: no-repeat;
-  background-size: center;
+  background-size: 100% 100%;
   position: relative;
   width: 100vw;
   height: 100vh;

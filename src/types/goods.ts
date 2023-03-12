@@ -12,6 +12,7 @@ export interface add_type {
   title: string;
   goodsSpuModelList: goodsSpu.edit_type[];
   goodsSkuModelList: goodsSku.edit_type[];
+  goodsSpecModelList: any;
 }
 
 export interface edit_type extends add_type {

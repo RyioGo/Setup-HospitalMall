@@ -15,6 +15,7 @@ import Upload from "@/components/Upload/index.vue";
 import WangEditor from "@/components/WangEditor/index.vue";
 import SetSKU from "./SetSKU.vue";
 import SetSPU from "./SetSPU.vue";
+import SetSpec from "./SetSpec.vue";
 @Setup
 class SetGoods extends Define<Emits> {
   visible = false;
@@ -32,6 +33,7 @@ class SetGoods extends Define<Emits> {
     title: "",
     goodsSpuModelList: [],
     goodsSkuModelList: [],
+    goodsSpecModelList: [],
   };
   categoryList: categoryType.edit_type[] = [];
 
@@ -39,6 +41,7 @@ class SetGoods extends Define<Emits> {
   refEditor!: any;
   setSKURef!: any;
   setSPURef!: any;
+  setSpecRef!: any;
 
   toggleShow(type: string, id?: string) {
     this.visible = true;
@@ -103,6 +106,7 @@ class SetGoods extends Define<Emits> {
       title: "",
       goodsSpuModelList: [],
       goodsSkuModelList: [],
+      goodsSpecModelList: [],
     };
     this.refUpload.setFile([], 0);
     this.refEditor.setValue("");
@@ -271,6 +275,27 @@ defineExpose({
             已添加{{ sg.form.goodsSkuModelList.length }}项
           </a-tag>
         </a-form-item>
+        <a-form-item
+          label="规格"
+          name="goodsSkuModelList"
+          :rules="[{ required: true, message: '请填写商品规格!' }]"
+        >
+          <a-button
+            type="primary"
+            shape="round"
+            @click="sg.setSpecRef.toggleShow(sg.form.id)"
+          >
+            <template #icon><setting-two-tone /></template>
+            设置规格
+          </a-button>
+          <a-tag
+            color="green"
+            style="margin-left: 8px"
+            v-if="sg.form.goodsSpecModelList.length"
+          >
+            已添加{{ sg.form.goodsSpecModelList.length }}项
+          </a-tag>
+        </a-form-item>
         <a-form-item :wrapper-col="{ offset: 6, span: 18 }">
           <a-button :loading="sg.loading" type="primary" html-type="submit">
             保存
@@ -285,6 +310,10 @@ defineExpose({
     <SetSPU
       :ref="(el) => (sg.setSPURef = el)"
       v-model:value="sg.form.goodsSpuModelList"
+    />
+    <SetSpec
+      :ref="(el: any) => (sg.setSpecRef = el)"
+      v-model:list="sg.form.goodsSpecModelList"
     />
   </div>
 </template>

@@ -27,12 +27,7 @@ class GoodsView extends Context {
 
   loading = false;
 
-  setSpecRef!: any;
   setGoodsRef!: any;
-
-  openSetSpec(id: string) {
-    this.setSpecRef.toggleShow(id);
-  }
 
   openSetGoods(type: string, id?: string) {
     this.setGoodsRef.toggleShow(type, id);
@@ -104,9 +99,9 @@ export default defineComponent({
       >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'actions'">
-            <a-button type="link" @click="openSetSpec(record.id)">
+            <!-- <a-button type="link" @click="openSetSpec(record.id)">
               规格
-            </a-button>
+            </a-button> -->
             <a-button type="link" @click="openSetGoods('edit', record.id)">
               编辑
             </a-button>
@@ -122,7 +117,6 @@ export default defineComponent({
         </template>
       </a-table>
     </a-card>
-    <SetSpec :ref="(el: any) => (setSpecRef = el)" />
     <SetGoods :ref="(el: any) => (setGoodsRef = el)" @list="getDataList" />
   </div>
 </template>
